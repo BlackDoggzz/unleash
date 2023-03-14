@@ -9,7 +9,6 @@ import { createTestConfig } from '../../config/test-config';
 import dbInit, { ITestDb } from '../helpers/database-init';
 import { IUnleashStores } from '../../../lib/types/stores';
 import FeatureToggleService from '../../../lib/services/feature-toggle-service';
-import { SegmentService } from '../../../lib/services/segment-service';
 import { FeatureToggle, ISegment, WeightType } from '../../../lib/types/model';
 import { PlaygroundFeatureSchema } from '../../../lib/openapi/spec/playground-feature-schema';
 import { offlineUnleashClientNode } from '../../../lib/util/offline-unleash-client.test';
@@ -20,18 +19,20 @@ import { playgroundStrategyEvaluation } from '../../../lib/openapi/spec/playgrou
 import { PlaygroundSegmentSchema } from 'lib/openapi/spec/playground-segment-schema';
 import { GroupService } from '../../../lib/services/group-service';
 import { AccessService } from '../../../lib/services/access-service';
+import { ISegmentService } from '../../../lib/segments/segment-service-interface';
+import { SegmentServiceMock } from '../../fixtures/fake-segment-service';
 
 let stores: IUnleashStores;
 let db: ITestDb;
 let service: PlaygroundService;
 let featureToggleService: FeatureToggleService;
-let segmentService: SegmentService;
+let segmentService: ISegmentService;
 
 beforeAll(async () => {
     const config = createTestConfig();
     db = await dbInit('playground_service_serial', config.getLogger);
     stores = db.stores;
-    segmentService = new SegmentService(stores, config);
+    segmentService = new SegmentServiceMock();
     const groupService = new GroupService(stores, config);
     const accessService = new AccessService(stores, config, groupService);
     featureToggleService = new FeatureToggleService(
@@ -51,11 +52,9 @@ afterAll(async () => {
 });
 
 const cleanup = async () => {
-    await stores.segmentStore.deleteAll();
     await stores.featureToggleStore.deleteAll();
     await stores.eventStore.deleteAll();
     await stores.featureStrategiesStore.deleteAll();
-    await stores.segmentStore.deleteAll();
 };
 
 afterEach(cleanup);
@@ -71,6 +70,7 @@ const mapSegmentSchemaToISegment = (
 ): ISegment => ({
     ...segment,
     name: segment.name || `test-segment ${index ?? 'unnumbered'}`,
+    description: segment.description || undefined,
     createdAt: new Date(),
 });
 
@@ -83,7 +83,7 @@ export const seedDatabaseForPlaygroundTest = async (
     if (segments) {
         await Promise.all(
             segments.map(async (segment, index) =>
-                database.stores.segmentStore.create(
+                database.stores.segmentStore?.create(
                     mapSegmentSchemaToISegment(segment, index),
                     { username: 'test' },
                 ),
@@ -147,16 +147,16 @@ export const seedDatabaseForPlaygroundTest = async (
                                 featureName: feature.name,
                                 environment,
                                 strategyName: strategy.name,
-                                projectId: feature.project,
+                                projectId: feature.project!,
                             },
                         );
 
                         if (strategySegments) {
                             await Promise.all(
                                 strategySegments.map((segmentId) =>
-                                    database.stores.segmentStore.addToStrategy(
+                                    database.stores.segmentStore?.addToStrategy(
                                         segmentId,
-                                        strategy.id,
+                                        strategy.id!,
                                     ),
                                 ),
                             );

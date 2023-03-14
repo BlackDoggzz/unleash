@@ -10,6 +10,7 @@ import sessionDb from '../../../lib/middleware/session-db';
 import { IUnleashStores } from '../../../lib/types';
 import { IUnleashServices } from '../../../lib/types/services';
 import { Db } from '../../../lib/db/db';
+import { SegmentServiceMock } from '../../fixtures/fake-segment-service';
 
 process.env.NODE_ENV = 'test';
 
@@ -38,6 +39,7 @@ async function createApp(
         ...customOptions,
     });
     const services = createServices(stores, config, db);
+    services.segmentService = new SegmentServiceMock();
     const unleashSession = sessionDb(config, undefined);
     const emitter = new EventEmitter();
     emitter.setMaxListeners(0);

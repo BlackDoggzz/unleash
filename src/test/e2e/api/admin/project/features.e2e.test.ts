@@ -39,7 +39,7 @@ const createFeatureToggle = (featureName: string, project = 'default') => {
 };
 
 const createSegment = async (segmentName: string) => {
-    const segment = await app.services.segmentService.create(
+    const segment = await app.services.segmentService!.create(
         {
             name: segmentName,
             description: '',

@@ -63,7 +63,7 @@ export interface IUnleashStores {
     userStore: IUserStore;
     userSplashStore: IUserSplashStore;
     roleStore: IRoleStore;
-    segmentStore: ISegmentStore;
+    segmentStore: ISegmentStore | undefined;
     patStore: IPatStore;
     publicSignupTokenStore: IPublicSignupTokenStore;
     favoriteFeaturesStore: IFavoriteFeaturesStore;

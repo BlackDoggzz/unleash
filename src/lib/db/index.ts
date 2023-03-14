@@ -27,7 +27,6 @@ import { FeatureEnvironmentStore } from './feature-environment-store';
 import { ClientMetricsStoreV2 } from './client-metrics-store-v2';
 import UserSplashStore from './user-splash-store';
 import RoleStore from './role-store';
-import SegmentStore from './segment-store';
 import GroupStore from './group-store';
 import PatStore from './pat-store';
 import { PublicSignupTokenStore } from './public-signup-token-store';
@@ -95,7 +94,7 @@ export const createStores = (
         ),
         userSplashStore: new UserSplashStore(db, eventBus, getLogger),
         roleStore: new RoleStore(db, eventBus, getLogger),
-        segmentStore: new SegmentStore(db, eventBus, getLogger),
+        segmentStore: undefined,
         groupStore: new GroupStore(db),
         publicSignupTokenStore: new PublicSignupTokenStore(
             db,

@@ -8,9 +8,9 @@ import { addDays, subDays } from 'date-fns';
 import ProjectService from '../../../lib/services/project-service';
 import FeatureToggleService from '../../../lib/services/feature-toggle-service';
 import { AccessService } from '../../../lib/services/access-service';
-import { SegmentService } from '../../../lib/services/segment-service';
 import { GroupService } from '../../../lib/services/group-service';
 import { FavoritesService } from '../../../lib/services';
+import { SegmentServiceMock } from '../../fixtures/fake-segment-service';
 
 let db;
 let stores;
@@ -29,7 +29,7 @@ beforeAll(async () => {
     const featureToggleService = new FeatureToggleService(
         stores,
         config,
-        new SegmentService(stores, config),
+        new SegmentServiceMock(),
         accessService,
     );
     const project = {

@@ -2,7 +2,6 @@ import FeatureToggleService from '../../../lib/services/feature-toggle-service';
 import { createTestConfig } from '../../config/test-config';
 import dbInit from '../helpers/database-init';
 import { DEFAULT_ENV } from '../../../lib/util/constants';
-import { SegmentService } from '../../../lib/services/segment-service';
 import { FeatureStrategySchema } from '../../../lib/openapi/spec/feature-strategy-schema';
 import User from '../../../lib/types/user';
 import { IConstraint, IVariant } from '../../../lib/types/model';
@@ -11,11 +10,13 @@ import { GroupService } from '../../../lib/services/group-service';
 import EnvironmentService from '../../../lib/services/environment-service';
 import { NoAccessError } from '../../../lib/error';
 import { SKIP_CHANGE_REQUEST } from '../../../lib/types';
+import { ISegmentService } from '../../../lib/segments/segment-service-interface';
+import { SegmentServiceMock } from '../../fixtures/fake-segment-service';
 
 let stores;
 let db;
 let service: FeatureToggleService;
-let segmentService: SegmentService;
+let segmentService: ISegmentService;
 let environmentService: EnvironmentService;
 let unleashConfig;
 
@@ -35,7 +36,7 @@ beforeAll(async () => {
     );
     unleashConfig = config;
     stores = db.stores;
-    segmentService = new SegmentService(stores, config);
+    segmentService = new SegmentServiceMock();
     const groupService = new GroupService(stores, config);
     const accessService = new AccessService(stores, config, groupService);
     service = new FeatureToggleService(

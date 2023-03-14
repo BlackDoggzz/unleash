@@ -9,11 +9,11 @@ import { RoleName } from '../../../lib/types/model';
 import { randomId } from '../../../lib/util/random-id';
 import EnvironmentService from '../../../lib/services/environment-service';
 import IncompatibleProjectError from '../../../lib/error/incompatible-project-error';
-import { SegmentService } from '../../../lib/services/segment-service';
 import { GroupService } from '../../../lib/services/group-service';
 import { FavoritesService } from '../../../lib/services';
 import { FeatureEnvironmentEvent } from '../../../lib/types/events';
 import { subDays } from 'date-fns';
+import { SegmentServiceMock } from '../../fixtures/fake-segment-service';
 
 let stores;
 let db: ITestDb;
@@ -40,10 +40,11 @@ beforeAll(async () => {
     });
     groupService = new GroupService(stores, config);
     accessService = new AccessService(stores, config, groupService);
+    const segmentService = new SegmentServiceMock();
     featureToggleService = new FeatureToggleService(
         stores,
         config,
-        new SegmentService(stores, config),
+        segmentService,
         accessService,
     );
 
@@ -655,14 +656,12 @@ test('should add a user to the project with a custom role', async () => {
             {
                 id: 2,
                 name: 'CREATE_FEATURE',
-                environment: null,
                 displayName: 'Create Feature Toggles',
                 type: 'project',
             },
             {
                 id: 8,
                 name: 'DELETE_FEATURE',
-                environment: null,
                 displayName: 'Delete Feature Toggles',
                 type: 'project',
             },
@@ -711,14 +710,12 @@ test('should delete role entries when deleting project', async () => {
             {
                 id: 2,
                 name: 'CREATE_FEATURE',
-                environment: null,
                 displayName: 'Create Feature Toggles',
                 type: 'project',
             },
             {
                 id: 8,
                 name: 'DELETE_FEATURE',
-                environment: null,
                 displayName: 'Delete Feature Toggles',
                 type: 'project',
             },
@@ -757,14 +754,12 @@ test('should change a users role in the project', async () => {
             {
                 id: 2,
                 name: 'CREATE_FEATURE',
-                environment: null,
                 displayName: 'Create Feature Toggles',
                 type: 'project',
             },
             {
                 id: 8,
                 name: 'DELETE_FEATURE',
-                environment: null,
                 displayName: 'Delete Feature Toggles',
                 type: 'project',
             },
@@ -940,7 +935,6 @@ test('Should allow bulk update of group permissions', async () => {
             {
                 id: 2,
                 name: 'CREATE_FEATURE',
-                environment: null,
                 displayName: 'Create Feature Toggles',
                 type: 'project',
             },
@@ -973,7 +967,6 @@ test('Should bulk update of only users', async () => {
             {
                 id: 2,
                 name: 'CREATE_FEATURE',
-                environment: null,
                 displayName: 'Create Feature Toggles',
                 type: 'project',
             },
@@ -1012,7 +1005,6 @@ test('Should allow bulk update of only groups', async () => {
             {
                 id: 2,
                 name: 'CREATE_FEATURE',
-                environment: null,
                 displayName: 'Create Feature Toggles',
                 type: 'project',
             },

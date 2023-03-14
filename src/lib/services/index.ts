@@ -26,7 +26,6 @@ import EnvironmentService from './environment-service';
 import FeatureTagService from './feature-tag-service';
 import ProjectHealthService from './project-health-service';
 import UserSplashService from './user-splash-service';
-import { SegmentService } from './segment-service';
 import { OpenApiService } from './openapi-service';
 import { ClientSpecService } from './client-spec-service';
 import { PlaygroundService } from './playground-service';
@@ -138,7 +137,7 @@ export const createServices = (
     const versionService = new VersionService(stores, config);
     const healthService = new HealthService(stores, config);
     const userFeedbackService = new UserFeedbackService(stores, config);
-    const segmentService = new SegmentService(stores, config);
+    const segmentService = undefined;
     const featureToggleServiceV2 = new FeatureToggleService(
         stores,
         config,
@@ -281,7 +280,6 @@ export {
     FeatureTagService,
     ProjectHealthService,
     UserSplashService,
-    SegmentService,
     OpenApiService,
     ClientSpecService,
     PlaygroundService,

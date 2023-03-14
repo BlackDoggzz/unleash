@@ -1,13 +1,25 @@
 import { ISegmentStore } from '../../lib/types/stores/segment-store';
 import { IFeatureStrategySegment, ISegment } from '../../lib/types/model';
+import { IUser } from 'lib/server-impl';
 
 export default class FakeSegmentStore implements ISegmentStore {
+    segments: ISegment[] = [];
+
     count(): Promise<number> {
-        return Promise.resolve(0);
+        return Promise.resolve(this.segments.length);
     }
 
-    create(): Promise<ISegment> {
-        throw new Error('Method not implemented.');
+    create(
+        data: Omit<ISegment, 'id'>,
+        user: Partial<Pick<IUser, 'username' | 'email'>>,
+    ): Promise<ISegment> {
+        const segment = {
+            ...data,
+            id: this.segments.length + 1,
+            createdBy: user.email || user.username,
+        } as ISegment;
+        this.segments.push(segment);
+        return Promise.resolve(segment);
     }
 
     async delete(): Promise<void> {
@@ -15,6 +27,7 @@ export default class FakeSegmentStore implements ISegmentStore {
     }
 
     async deleteAll(): Promise<void> {
+        this.segments = [];
         return;
     }
 
@@ -27,11 +40,11 @@ export default class FakeSegmentStore implements ISegmentStore {
     }
 
     async getAll(): Promise<ISegment[]> {
-        return [];
+        return Promise.resolve(this.segments);
     }
 
     async getActive(): Promise<ISegment[]> {
-        return [];
+        return Promise.resolve(this.segments);
     }
 
     async getByStrategy(): Promise<ISegment[]> {

@@ -24,7 +24,6 @@ import {
     createFakeFeatureToggleService,
     createFeatureToggleService,
 } from '../feature-toggle/createFeatureToggleService';
-import SegmentStore from '../../db/segment-store';
 import { FeatureEnvironmentStore } from '../../db/feature-environment-store';
 import FakeFeatureToggleStore from '../../../test/fixtures/fake-feature-toggle-store';
 import FakeTagStore from '../../../test/fixtures/fake-tag-store';
@@ -118,7 +117,7 @@ export const createExportImportTogglesService = (
     const featureToggleStore = new FeatureToggleStore(db, eventBus, getLogger);
     const tagStore = new TagStore(db, eventBus, getLogger);
     const tagTypeStore = new TagTypeStore(db, eventBus, getLogger);
-    const segmentStore = new SegmentStore(db, eventBus, getLogger);
+    const segmentStore = new FakeSegmentStore();
     const projectStore = new ProjectStore(
         db,
         eventBus,

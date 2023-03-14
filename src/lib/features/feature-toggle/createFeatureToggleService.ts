@@ -2,7 +2,6 @@ import {
     AccessService,
     FeatureToggleService,
     GroupService,
-    SegmentService,
 } from '../../services';
 import FeatureStrategiesStore from '../../db/feature-strategy-store';
 import FeatureToggleStore from '../../db/feature-toggle-store';
@@ -10,7 +9,6 @@ import FeatureToggleClientStore from '../../db/feature-toggle-client-store';
 import ProjectStore from '../../db/project-store';
 import FeatureTagStore from '../../db/feature-tag-store';
 import { FeatureEnvironmentStore } from '../../db/feature-environment-store';
-import SegmentStore from '../../db/segment-store';
 import ContextFieldStore from '../../db/context-field-store';
 import GroupStore from '../../db/group-store';
 import { AccountStore } from '../../db/account-store';
@@ -26,7 +24,6 @@ import FakeFeatureToggleClientStore from '../../../test/fixtures/fake-feature-to
 import FakeProjectStore from '../../../test/fixtures/fake-project-store';
 import FakeFeatureTagStore from '../../../test/fixtures/fake-feature-tag-store';
 import FakeFeatureEnvironmentStore from '../../../test/fixtures/fake-feature-environment-store';
-import FakeSegmentStore from '../../../test/fixtures/fake-segment-store';
 import FakeContextFieldStore from '../../../test/fixtures/fake-context-field-store';
 import FakeGroupStore from '../../../test/fixtures/fake-group-store';
 import { FakeAccountStore } from '../../../test/fixtures/fake-account-store';
@@ -34,6 +31,7 @@ import FakeAccessStore from '../../../test/fixtures/fake-access-store';
 import FakeRoleStore from '../../../test/fixtures/fake-role-store';
 import FakeEnvironmentStore from '../../../test/fixtures/fake-environment-store';
 import EventStore from '../../db/event-store';
+import { SegmentServiceMock } from '../../../test/fixtures/fake-segment-service';
 
 export const createFeatureToggleService = (
     db: Db,
@@ -64,7 +62,6 @@ export const createFeatureToggleService = (
         eventBus,
         getLogger,
     );
-    const segmentStore = new SegmentStore(db, eventBus, getLogger);
     const contextFieldStore = new ContextFieldStore(db, getLogger);
     const groupStore = new GroupStore(db);
     const accountStore = new AccountStore(db, getLogger);
@@ -81,10 +78,7 @@ export const createFeatureToggleService = (
         { getLogger },
         groupService,
     );
-    const segmentService = new SegmentService(
-        { segmentStore, featureStrategiesStore, eventStore },
-        config,
-    );
+    const segmentService = new SegmentServiceMock();
     const featureToggleService = new FeatureToggleService(
         {
             featureStrategiesStore,
@@ -114,7 +108,6 @@ export const createFakeFeatureToggleService = (
     const projectStore = new FakeProjectStore();
     const featureTagStore = new FakeFeatureTagStore();
     const featureEnvironmentStore = new FakeFeatureEnvironmentStore();
-    const segmentStore = new FakeSegmentStore();
     const contextFieldStore = new FakeContextFieldStore();
     const groupStore = new FakeGroupStore();
     const accountStore = new FakeAccountStore();
@@ -130,10 +123,7 @@ export const createFakeFeatureToggleService = (
         { getLogger },
         groupService,
     );
-    const segmentService = new SegmentService(
-        { segmentStore, featureStrategiesStore, eventStore },
-        config,
-    );
+    const segmentService = new SegmentServiceMock();
     const featureToggleService = new FeatureToggleService(
         {
             featureStrategiesStore,

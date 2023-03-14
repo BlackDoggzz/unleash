@@ -7,9 +7,9 @@ import ProjectHealthService from '../../../lib/services/project-health-service';
 import { createTestConfig } from '../../config/test-config';
 import { IUnleashStores } from '../../../lib/types';
 import { IUser } from '../../../lib/server-impl';
-import { SegmentService } from '../../../lib/services/segment-service';
 import { GroupService } from '../../../lib/services/group-service';
 import { FavoritesService } from '../../../lib/services';
+import { SegmentServiceMock } from '../../fixtures/fake-segment-service';
 
 let stores: IUnleashStores;
 let db: ITestDb;
@@ -34,7 +34,7 @@ beforeAll(async () => {
     featureToggleService = new FeatureToggleService(
         stores,
         config,
-        new SegmentService(stores, config),
+        new SegmentServiceMock(),
         accessService,
     );
     favoritesService = new FavoritesService(stores, config);

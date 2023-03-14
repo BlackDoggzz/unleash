@@ -37,7 +37,7 @@ afterAll(async () => {
 });
 
 beforeEach(async () => {
-    await db.stores.segmentStore.deleteAll();
+    await db.stores.segmentStore?.deleteAll();
     await db.stores.featureToggleStore.deleteAll();
     await db.stores.clientMetricsStoreV2.deleteAll();
     await db.stores.apiTokenStore.deleteAll();
