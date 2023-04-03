@@ -127,7 +127,26 @@ docker run -e POSTGRES_PASSWORD=passord \
 4. Start Unleash. As with the database, use the network you created in step 2.
 
 ```sh
-docker run -p 4242:4242 \
+docker run 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+p 4242/4242 
   -e DATABASE_HOST=postgres -e DATABASE_NAME=unleash \
   -e DATABASE_USERNAME=unleash_user -e DATABASE_PASSWORD=passord \
   -e DATABASE_SSL=false \
